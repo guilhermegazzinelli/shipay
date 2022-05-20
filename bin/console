@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
+require "irb"
+require "irb/completion"
 require "bundler/setup"
 require "shipay"
 
@@ -11,5 +13,35 @@ require "shipay"
 # require "pry"
 # Pry.start
 
-require "irb"
-IRB.start(__FILE__)
+
+# Config IRB to enable --simple-prompt and auto indent
+IRB.conf[:PROMPT_MODE] = :SIMPLE
+IRB.conf[:AUTO_INDENT] = true
+
+
+def reload!(print = true)
+  puts 'Reloading ...' if print
+  # Main project directory.
+  root_dir = File.expand_path('..', __dir__)
+  # Directories within the project that should be reloaded.
+  reload_dirs = %w{lib}
+  # Loop through and reload every file in all relevant project directories.
+  reload_dirs.each do |dir|
+    Dir.glob("#{root_dir}/#{dir}/**/*.rb").each { |f| load(f) }
+  end
+  # Return true when complete.
+  true
+end
+
+
+
+IRB.start
+
+Shipay.secret_key = 'Q__g6ie850Pv4jVBQUeyAMA_mlJH3xG1Acg2FiPU_lYpVol9z69RHmOE4BZDMaHVGsMEg1s9BI5pvgKkCAWDdw'
+Shipay.access_key='CyUqG2hSfQJbE8OTWfy1fQ'
+Shipay.client_id='ubceuMCPeVygHW8xynrFYzbF3JKE1zlnpjNBReM6gDz0jzQ-5clVgRdtRRDJ5yWENkGMnC3VI2wQSyu_507g5c9ujS6D5eOSBVheKbMVbEW8qk8dYb41yqgl7o9xv-puarpHV7Dk3jv6n6_HZlAl4S8gHjNsayuj2RSqT8AbtY4'
+
+
+Shipay::Authenticator.instance()
+
+Shipay::Authenticator.headers
