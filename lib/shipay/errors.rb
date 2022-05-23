@@ -17,9 +17,9 @@ module Shipay
   class ResponseError < ShipayError
     attr_reader :request_params, :error
 
-    def initialize(request_params, error)
+    def initialize(request_params, error, message=nil)
       @request_params, @error = request_params, error
-      super @error.message
+      super @error.message + " => " + message
     end
   end
 
@@ -36,7 +36,7 @@ module Shipay
 
     def initialize(response)
       @response = response
-      @errors   = response['errors'].map do |error|
+      @errors   = response['message'].map do |message|
         params = error.values_at('message', 'parameter_name', 'type', 'url')
         ParamError.new(*params)
       end
@@ -55,13 +55,13 @@ module Shipay
   class ParamError < ShipayError
     attr_reader :parameter_name, :type, :url
 
-    def initialize(message, parameter_name, type, url)
+    def initialize(message, parameter_name, type, url=nil)
       @parameter_name, @type, @url = parameter_name, type, url
       super message
     end
 
     def to_h
-      { parameter_name: parameter_name , type: type , message: message }
+      { parameter_name: parameter_name, type: type, message: message }
     end
   end
 end

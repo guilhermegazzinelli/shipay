@@ -33,15 +33,15 @@ def reload!(print = true)
   true
 end
 
+def initialize_shipay
+  pp "Initilizing..."
+  Shipay.secret_key = 'Q__g6ie850Pv4jVBQUeyAMA_mlJH3xG1Acg2FiPU_lYpVol9z69RHmOE4BZDMaHVGsMEg1s9BI5pvgKkCAWDdw'
+  Shipay.access_key ='CyUqG2hSfQJbE8OTWfy1fQ'
+  Shipay.client_id='ubceuMCPeVygHW8xynrFYzbF3JKE1zlnpjNBReM6gDz0jzQ-5clVgRdtRRDJ5yWENkGMnC3VI2wQSyu_507g5c9ujS6D5eOSBVheKbMVbEW8qk8dYb41yqgl7o9xv-puarpHV7Dk3jv6n6_HZlAl4S8gHjNsayuj2RSqT8AbtY4'
 
+  Shipay.credentials = [{key: :default, secret_key: "Q__g6ie850Pv4jVBQUeyAMA_mlJH3xG1Acg2FiPU_lYpVol9z69RHmOE4BZDMaHVGsMEg1s9BI5pvgKkCAWDdw", access_key: "CyUqG2hSfQJbE8OTWfy1fQ", client_id: "ubceuMCPeVygHW8xynrFYzbF3JKE1zlnpjNBReM6gDz0jzQ-5clVgRdtRRDJ5yWENkGMnC3VI2wQSyu_507g5c9ujS6D5eOSBVheKbMVbEW8qk8dYb41yqgl7o9xv-puarpHV7Dk3jv6n6_HZlAl4S8gHjNsayuj2RSqT8AbtY4"}]
+end
 
+initialize_shipay
 IRB.start
 
-Shipay.secret_key = 'Q__g6ie850Pv4jVBQUeyAMA_mlJH3xG1Acg2FiPU_lYpVol9z69RHmOE4BZDMaHVGsMEg1s9BI5pvgKkCAWDdw'
-Shipay.access_key='CyUqG2hSfQJbE8OTWfy1fQ'
-Shipay.client_id='ubceuMCPeVygHW8xynrFYzbF3JKE1zlnpjNBReM6gDz0jzQ-5clVgRdtRRDJ5yWENkGMnC3VI2wQSyu_507g5c9ujS6D5eOSBVheKbMVbEW8qk8dYb41yqgl7o9xv-puarpHV7Dk3jv6n6_HZlAl4S8gHjNsayuj2RSqT8AbtY4'
-
-
-Shipay::Authenticator.instance()
-
-Shipay::Authenticator.headers

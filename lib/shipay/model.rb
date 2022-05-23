@@ -1,36 +1,41 @@
-
 module Shipay
   class Model < ShipayObject
-
     def create
-      update Shipay::Request.post(self.class.url, params: to_hash).call(class_name)
+      byebug
+      update Shipay::Request.post(self.class.url, params: to_hash, client_key: @client_key).call(class_name)
       self
     end
 
     def save
-      update Shipay::Request.put(url, params: unsaved_attributes).call(class_name)
+      update Shipay::Request.put(url, params: unsaved_attributes, client_key: @client_key).call(class_name)
       self
     end
 
     def url(*params)
-      raise RequestError.new('Invalid ID') unless id.present?
-      self.class.url CGI.escape(id.to_s), *params
+      raise RequestError.new('Invalid ID') unless primary_key.present?
+      self.class.url CGI.escape(primary_key.to_s), *params
+    end
+
+    def fetch
+      update self.class.find(primary_key, client_key: @client_key)
+    end
+
+    def primary_key
+      id
     end
 
     def class_name
       self.class.to_s.split('::').last
     end
 
-
     class << self
-
-      def create(*args, &block)
-        self.new(*args, &block).create
+      def create(*args, **options)
+        self.new(*args, **options).create
       end
 
-      def find_by_id(id)
+      def find_by_id(id, **options)
         raise RequestError.new('Invalid ID') unless id.present?
-        Shipay::Request.get(url id).call class_name
+        Shipay::Request.get(url(id), options).call class_name
       end
       alias :find :find_by_id
 
@@ -59,13 +64,6 @@ module Shipay
       def underscored_class_name
         class_name.gsub(/[a-z0-9][A-Z]/){|s| "#{s[0]}_#{s[1]}"}.downcase
       end
-
-      def extract_page_count_or_params(*args, **params)
-        params[:page]  ||= args[0] || 1
-        params[:count] ||= args[1] || 10
-        params
-      end
-
     end
   end
 end

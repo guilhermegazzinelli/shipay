@@ -1,5 +1,5 @@
 module Shipay
-  class Order < OrderCommom
+  class OrderBacen < OrderCommom
 
     # def self.url(*params)
     #   byebug

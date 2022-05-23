@@ -9,6 +9,7 @@ require_relative "shipay/core_ext"
 require_relative "shipay/errors"
 require_relative "shipay/util"
 require_relative "shipay/token_manager"
+require_relative "shipay/order_commom"
 
 
 Dir[File.expand_path('../shipay/resources/*.rb', __FILE__)].map do |path|
@@ -20,8 +21,12 @@ module Shipay
   # Your code goes here...
 
   class << self
-    attr_accessor :api_endpoint, :access_key, :secret_key, :client_id, :callback_url, :credentials
+    attr_accessor :access_key, :secret_key, :client_id, :callback_url, :credentials, :default_client_key
+    attr_reader :api_endpoint
+
   end
+
+  @default_client_key = :default
 
   # @api_endpoint = (production?)? "https://" : "https://api-staging.shipay.com.br"
   @api_endpoint =  "https://api-staging.shipay.com.br"

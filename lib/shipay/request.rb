@@ -19,9 +19,11 @@ module Shipay
 
         @path       = path
         @method     = method
-        @parameters = options[:params]  || nil
-        @query      = options[:query]   || Hash.new
-        @headers    = options[:headers] || Hash.new
+        @parameters = options[:params]      || nil
+        @query      = options[:query]       || Hash.new
+        @headers    = options[:headers]     || Hash.new
+        @auth       = options[:auth]        || false
+        @client_key = options[:client_key]  || Shipay.default_client_key #|| :default
     end
 
     def run
@@ -30,19 +32,20 @@ module Shipay
 
       rescue RestClient::Exception => error
         begin
+          byebug
           parsed_error = MultiJson.decode error.http_body
 
           if error.is_a? RestClient::ResourceNotFound
-            if parsed_error['errors']
+            if parsed_error['message']
               raise Shipay::NotFound.new(parsed_error, request_params, error)
             else
               raise Shipay::NotFound.new(nil, request_params, error)
             end
           else
-            if parsed_error['errors']
-              raise Shipay::ValidationError.new parsed_error
+            if parsed_error['message']
+              raise Shipay::ResponseError.new(request_params, error, parsed_error['message'])
             else
-              raise Shipay::ResponseError.new(request_params, error)
+              raise Shipay::ValidationError.new parsed_error
             end
           end
         rescue MultiJson::ParseError
@@ -57,15 +60,20 @@ module Shipay
     end
 
     def call(ressource_name)
-      ShipayObject.convert run, ressource_name
+      ShipayObject.convert run, ressource_name, @client_key
     end
 
     def self.get(url, options={})
+      pp options
       self.new url, 'GET', options
     end
 
+    def self.auth(url, options={})
+      options[:auth] = true
+      self.new url, 'POST', options
+    end
+
     def self.post(url, options={})
-      #byebug
       self.new url, 'POST', options
     end
 
@@ -74,7 +82,6 @@ module Shipay
     end
 
     def self.patch(url, options={})
-      #byebug
       self.new url, 'PATCH', options
     end
 
@@ -83,18 +90,19 @@ module Shipay
     end
 
     def request_params
-      #byebug
       aux = {
         method:       method,
         url:          full_api_url,
-
-        # headers:      DEFAULT_HEADERS.merge(Shipay::Authenticator.token )
-        headers:      DEFAULT_HEADERS.merge(Shipay::Authenticator.token )
-
-        # ssl_version:  'TLSv1_2'
       }
+      #
+       aux.merge!({ payload:      MultiJson.encode(parameters.merge({callback_url: Shipay.callback_url}))}) if parameters && Shipay.callback_url
       aux.merge!({ payload:      MultiJson.encode(parameters)}) if parameters
-      puts aux
+      extra_headers = DEFAULT_HEADERS
+      extra_headers[:authorization] = "Bearer #{Shipay::TokenManager.token_for @client_key}" unless @auth
+      extra_headers["x-shipay-order-type"] = "e-order" if (!@auth && Shipay::TokenManager.client_type_for(@client_key) == :e_comerce)
+
+      aux.merge!({ headers: extra_headers })
+      pp aux
       aux
     end
 

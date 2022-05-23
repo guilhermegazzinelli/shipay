@@ -5,9 +5,9 @@ Shipay.access_key='CyUqG2hSfQJbE8OTWfy1fQ'
 Shipay.client_id='ubceuMCPeVygHW8xynrFYzbF3JKE1zlnpjNBReM6gDz0jzQ-5clVgRdtRRDJ5yWENkGMnC3VI2wQSyu_507g5c9ujS6D5eOSBVheKbMVbEW8qk8dYb41yqgl7o9xv-puarpHV7Dk3jv6n6_HZlAl4S8gHjNsayuj2RSqT8AbtY4'
 
 
-Shipay::Authenticator.instance()
+# Shipay::Authenticator.instance()
 
-Shipay::Authenticator.headers
+# Shipay::Authenticator.headers
 sh = Shipay::Order.new({
 	order_ref: "shipaypag-001",
 	wallet: "shipay-pagador",
@@ -35,8 +35,7 @@ sh = Shipay::Order.new({
 		email: "shipay-pagador@shipay.com.br",
 		phone: "+55 11 99999-9999"
 	}
-})
- sh.create
+}, client_id: ).create
 
   puts sh
   # Shipay.api_endpoint='https://postman-echo.com/get'

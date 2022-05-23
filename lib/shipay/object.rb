@@ -6,13 +6,15 @@ module Shipay
       File.basename(path, '.rb').to_sym
     end
 
-    def initialize(response ={})
+    def initialize(response = {}, **options)
+      # raise MissingCredentialsError.new("Missing :client_key for extra options #{options}") if options && !options[:client_key]
+      @client_key = options[:client_key] || Shipay.default_client_key #|| :default
+
       @attributes = Hash.new
       @unsaved_attributes = Set.new
 
       update response
     end
-
 
     def []=(key,value)
       @attributes[key] = value
@@ -45,18 +47,18 @@ module Shipay
       @attributes.has_key?(name.to_s) || super
     end
 
-    def to_s
-      attributes_str = ''
-      (attributes.keys - ['id', 'object']).sort.each do |key|
-        attributes_str += " \033[1;33m#{key}:\033[0m#{self[key].inspect}" unless self[key].nil?
-      end
-      "\033[1;31m#<#{self.class.name}:\033[0;32m#{id}#{attributes_str}\033[0m\033[0m\033[1;31m>\033[0;32m"
-    end
-    alias :inspect :to_s
+    # def to_s
+    #   attributes_str = ''
+    #   (attributes.keys - ['id', 'object']).sort.each do |key|
+    #     attributes_str += " \033[1;33m#{key}:\033[0m#{self[key].inspect}" unless self[key].nil?
+    #   end
+    #   "\033[1;31m#<#{self.class.name}:\033[0;32m#{id}#{attributes_str}\033[0m\033[0m\033[1;31m>\033[0;32m"
+    # end
+    # # alias :inspect :to_s
 
     protected
     def update(attributes)
-      removed_attributes = @attributes.keys - attributes.keys
+      removed_attributes = @attributes.keys - attributes.to_hash.keys
 
       removed_attributes.each do |key|
         @attributes.delete key
@@ -65,7 +67,7 @@ module Shipay
       attributes.each do |key, value|
         key = key.to_s
 
-        @attributes[key] = ShipayObject.convert(value, Util.singularize(key))
+        @attributes[key] = ShipayObject.convert(value, Util.singularize(key), @client_key)
         @unsaved_attributes.delete key
       end
     end
@@ -106,12 +108,12 @@ module Shipay
 
 
     class << self
-      def convert(response, resource_name = nil)
+      def convert(response, resource_name = nil, client_key=nil)
         case response
         when Array
-          response.map{ |i| convert i, resource_name }
+          response.map{ |i| convert i, resource_name, client_key }
         when Hash
-          resource_class_for(resource_name).new(response)
+          resource_class_for(resource_name).new(response, client_key: client_key)
         else
           response
         end
@@ -131,8 +133,6 @@ module Shipay
       def capitalize_name(name)
         name.gsub(/(\A\w|\_\w)/){ |str| str.gsub('_', '').upcase }
       end
-
-
     end
   end
 end
