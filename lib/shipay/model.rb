@@ -1,7 +1,6 @@
 module Shipay
   class Model < ShipayObject
     def create
-      byebug
       update Shipay::Request.post(self.class.url, params: to_hash, client_key: @client_key).call(class_name)
       self
     end

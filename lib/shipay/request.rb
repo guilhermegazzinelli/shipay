@@ -32,7 +32,6 @@ module Shipay
 
       rescue RestClient::Exception => error
         begin
-          byebug
           parsed_error = MultiJson.decode error.http_body
 
           if error.is_a? RestClient::ResourceNotFound

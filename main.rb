@@ -35,7 +35,7 @@ sh = Shipay::Order.new({
 		email: "shipay-pagador@shipay.com.br",
 		phone: "+55 11 99999-9999"
 	}
-}, client_id: ).create
+}).create
 
   puts sh
   # Shipay.api_endpoint='https://postman-echo.com/get'
