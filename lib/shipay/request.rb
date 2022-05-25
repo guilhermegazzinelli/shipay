@@ -23,7 +23,7 @@ module Shipay
         @query      = options[:query]       || Hash.new
         @headers    = options[:headers]     || Hash.new
         @auth       = options[:auth]        || false
-        @client_key = options[:client_key]  || Shipay.default_client_key #|| :default
+        @client_key = @parameters[:client_key]  || Shipay.default_client_key #|| :default
     end
 
     def run
@@ -94,8 +94,11 @@ module Shipay
         url:          full_api_url,
       }
       #
-       aux.merge!({ payload:      MultiJson.encode(parameters.merge({callback_url: Shipay.callback_url}))}) if parameters && Shipay.callback_url
-      aux.merge!({ payload:      MultiJson.encode(parameters)}) if parameters
+      if parameters && Shipay.callback_url
+        aux.merge!({ payload:      MultiJson.encode(parameters.merge({callback_url: Shipay.callback_url}))})
+      elsif parameters
+        aux.merge!({ payload:      MultiJson.encode(parameters)})
+      end
       extra_headers = DEFAULT_HEADERS
       extra_headers[:authorization] = "Bearer #{Shipay::TokenManager.token_for @client_key}" unless @auth
       extra_headers["x-shipay-order-type"] = "e-order" if (!@auth && Shipay::TokenManager.client_type_for(@client_key) == :e_comerce)

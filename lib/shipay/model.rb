@@ -28,8 +28,8 @@ module Shipay
     end
 
     class << self
-      def create(*args, **options)
-        self.new(*args, **options).create
+      def create(*args)
+        self.new(*args).create
       end
 
       def find_by_id(id, **options)
