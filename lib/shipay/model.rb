@@ -1,12 +1,12 @@
 module Shipay
   class Model < ShipayObject
     def create
-      update Shipay::Request.post(self.class.url, params: to_hash, client_key: @client_key).call(class_name)
+      update Shipay::Request.post(self.class.url, params: to_hash).call(class_name)
       self
     end
 
     def save
-      update Shipay::Request.put(url, params: unsaved_attributes, client_key: @client_key).call(class_name)
+      update Shipay::Request.put(url, params: unsaved_attributes).call(class_name)
       self
     end
 
@@ -16,7 +16,7 @@ module Shipay
     end
 
     def fetch
-      update self.class.find(primary_key, client_key: @client_key)
+      update self.class.find(primary_key, client_key: client_key)
     end
 
     def primary_key

@@ -8,11 +8,11 @@ module Shipay
 
     def initialize(response = {})
       # raise MissingCredentialsError.new("Missing :client_key for extra options #{options}") if options && !options[:client_key]
-     response[:client_key] ||= Shipay.default_client_key #|| :default
 
       @attributes = Hash.new
       @unsaved_attributes = Set.new
 
+      @client_key = response[:client_key] ||= Shipay.default_client_key #|| :default
       update response
     end
 
@@ -113,8 +113,6 @@ module Shipay
         when Array
           response.map{ |i| convert i, resource_name, client_key }
         when Hash
-          pp "RESPONSE"
-          pp response
           resource_class_for(resource_name).new(response.merge({client_key: client_key}))
         else
           response

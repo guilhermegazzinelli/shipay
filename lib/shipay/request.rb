@@ -15,15 +15,13 @@ module Shipay
     attr_accessor :path, :method, :parameters, :headers, :query
 
     def initialize(path, method, options={})
-        # raise Shipay::RequestError, 'You need to configure keys before performing requests.' unless Shipay.api_key && Shipay.access_key && Shipay.client_id
-
         @path       = path
         @method     = method
         @parameters = options[:params]      || nil
         @query      = options[:query]       || Hash.new
         @headers    = options[:headers]     || Hash.new
         @auth       = options[:auth]        || false
-        @client_key = @parameters[:client_key]  || Shipay.default_client_key #|| :default
+        @client_key = options[:client_key]  || @parameters && @parameters["client_key"] || Shipay.default_client_key
     end
 
     def run

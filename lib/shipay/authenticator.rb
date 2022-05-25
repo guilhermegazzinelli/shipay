@@ -12,7 +12,7 @@ module Shipay
         @secret_key = options.fetch(:secret_key)
         @access_key = options.fetch(:access_key)
         @client_id = options.fetch(:client_id)
-        @key = Shipay::Util.to_sym(options.fetch(:key, Shipay.default_client_key )) # || :default
+        @key = Shipay::Util.to_sym(options.fetch(:key, Shipay.default_client_key ))
         @default = options.fetch(:default, true)
         @type = options.fetch(:type, :pdv)
         raise ParamError.new("Incorrect client type, must be one of #{CLIENT_TYPES}", :type, "Symbol") unless CLIENT_TYPES.include? @type
@@ -48,11 +48,11 @@ module Shipay
       private
 
       def authenticate
-        set_token_from_request Shipay::Request.auth('/pdvauth', {params: {client_id: @client.client_id, secret_key: @client.secret_key, access_key: @client.access_key }}).run
+        set_token_from_request Shipay::Request.auth('/pdvauth', {params: {client_id: @client.client_id, secret_key: @client.secret_key, access_key: @client.access_key, client_key: @key}}).run
       end
 
       def refresh_token
-        set_token_from_request Shipay::Request.auth('/refresh-token', {headers:   {  authorization: 'Bearer ' + @r_token} }).run
+        set_token_from_request Shipay::Request.auth('/refresh-token', {headers:   {  authorization: 'Bearer ' + @r_token}, client_key: @key}).run
       end
 
       def refresh_token_if_expired
