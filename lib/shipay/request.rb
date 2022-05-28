@@ -92,7 +92,7 @@ module Shipay
         url:          full_api_url,
       }
 
-      parameters.reject{|k, v| k == :client_key}
+      parameters&.reject!{|k, v| k == :client_key}
 
       if parameters && Shipay.callback_url
         aux.merge!({ payload:      MultiJson.encode(parameters.merge({callback_url: Shipay.callback_url}))})
