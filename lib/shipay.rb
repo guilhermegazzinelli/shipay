@@ -18,12 +18,10 @@ end
 
 module Shipay
   class Error < StandardError; end
-  # Your code goes here...
 
   class << self
     attr_accessor :access_key, :secret_key, :client_id, :callback_url, :credentials, :default_client_key
     attr_reader :api_endpoint
-
   end
 
   @default_client_key = :default

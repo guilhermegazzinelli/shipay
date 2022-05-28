@@ -12,7 +12,7 @@ module Shipay
       @attributes = Hash.new
       @unsaved_attributes = Set.new
 
-      @client_key = response[:client_key] ||= Shipay.default_client_key #|| :default
+      @client_key = response.dig(:client_key) || Shipay.default_client_key #|| :default
       update response
     end
 

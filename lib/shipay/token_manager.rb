@@ -3,6 +3,8 @@ module Shipay
   class TokenManager
     attr_reader :authenticators, :mutex
 
+    # private_class_method :new
+
     def initialize()
       tokens = nil
       if Shipay.credentials
@@ -38,7 +40,7 @@ module Shipay
       end
     end
 
-    def self.token_for key = :default
+    def self.token_for(key = Shipay.default_client_key)
       self.instance unless @instance
       k = Shipay::Util.to_sym(key)
       if @instance.authenticators

@@ -21,7 +21,7 @@ module Shipay
         @query      = options[:query]       || Hash.new
         @headers    = options[:headers]     || Hash.new
         @auth       = options[:auth]        || false
-        @client_key = options[:client_key]  || @parameters && @parameters["client_key"] || Shipay.default_client_key
+        @client_key = options[:client_key]  || @parameters && ( @parameters[:client_key] || @parameters["client_key"] ) || Shipay.default_client_key
     end
 
     def run
@@ -91,7 +91,9 @@ module Shipay
         method:       method,
         url:          full_api_url,
       }
-      #
+
+      parameters.reject{|k, v| k == :client_key}
+
       if parameters && Shipay.callback_url
         aux.merge!({ payload:      MultiJson.encode(parameters.merge({callback_url: Shipay.callback_url}))})
       elsif parameters

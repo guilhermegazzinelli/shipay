@@ -8,7 +8,7 @@ module Shipay
 
     def refund(params={})
       raise ParamError.new("Missing ammount param", :amount, :float, url('refund')) unless params.has_key? :amount
-      update Shipay::Request.delete(url('refund'), params: params).call(class_name)
+      update Shipay::Request.delete(url('refund'), params: params.merge(client_key: @client_key)).call(class_name)
     end
 
     def primary_key
