@@ -88,8 +88,8 @@ module Shipay
       end
     end
 
-    def self.client_type_for key
-      client_for(key = Shipay.default_client_key)&.type || :pdv
+    def self.client_type_for key = Shipay.default_client_key
+      client_for(key)&.type || :pdv
     end
 
     def self.instance
