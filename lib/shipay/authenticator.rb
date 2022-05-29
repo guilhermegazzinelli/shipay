@@ -31,37 +31,37 @@ module Shipay
     end
   end
 
-    class Authenticator
-      attr_reader :key, :client
+  class Authenticator
+    attr_reader :key, :client
 
-      def initialize(client)
-        @client = client
-        @key = client.key
-        authenticate
-      end
+    def initialize(client)
+      @client = client
+      @key = client.key
+      authenticate
+    end
 
-      def token
-        refresh_token_if_expired
-        @a_token
-      end
+    def token
+      refresh_token_if_expired
+      @a_token
+    end
 
-      private
+    private
 
-      def authenticate
-        set_token_from_request Shipay::Request.auth('/pdvauth', {params: {client_id: @client.client_id, secret_key: @client.secret_key, access_key: @client.access_key, client_key: @key}}).run
-      end
+    def authenticate
+      set_token_from_request Shipay::Request.auth('/pdvauth', {params: {client_id: @client.client_id, secret_key: @client.secret_key, access_key: @client.access_key, client_key: @key}}).run
+    end
 
-      def refresh_token
-        set_token_from_request Shipay::Request.auth('/refresh-token', {headers:   {  authorization: 'Bearer ' + @r_token}, client_key: @key}).run
-      end
+    def refresh_token
+      set_token_from_request Shipay::Request.auth('/refresh-token', {headers:   {  authorization: 'Bearer ' + @r_token}, client_key: @key}).run
+    end
 
-      def refresh_token_if_expired
-        refresh_token if Time.at(JWT.decode(@a_token, nil, false).first.dig('exp')) < Time.now()
-      end
+    def refresh_token_if_expired
+      refresh_token if Time.at(JWT.decode(@a_token, nil, false).first.dig('exp')) < Time.now()
+    end
 
-      def set_token_from_request response
-        @a_token = response['access_token']
-        @r_token = response['refresh_token']
-      end
+    def set_token_from_request response
+      @a_token = response['access_token']
+      @r_token = response['refresh_token']
+    end
   end
 end
