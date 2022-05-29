@@ -9,8 +9,8 @@ module Shipay
 
     def initialize(**options)
       begin
-        @secret_key = options.fetch(:secret_key)
-        @access_key = options.fetch(:access_key)
+        @secret_key = options.fetch(:secret_key, Shipay.secret_key)
+        @access_key = options.fetch(:access_key, Shipay.access_key)
         @client_id = options.fetch(:client_id)
         @key = Shipay::Util.to_sym(options.fetch(:key, Shipay.default_client_key ))
         @default = options.fetch(:default, true)
