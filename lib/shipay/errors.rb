@@ -19,7 +19,9 @@ module Shipay
 
     def initialize(request_params, error, message=nil)
       @request_params, @error = request_params, error
-      super @error.message + " => " + message
+      msg = @error.message
+      msg +=  " => " + message if message
+      super msg
     end
   end
 
