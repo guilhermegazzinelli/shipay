@@ -17,6 +17,7 @@ module Shipay
 
     def fetch
       update self.class.find(primary_key, client_key: client_key)
+      self
     end
 
     def primary_key
