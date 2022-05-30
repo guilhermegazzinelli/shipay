@@ -61,7 +61,7 @@ module Shipay
     #
     # @return [String] Auth token
     #
-    def self.token_for(key = :default)
+    def self.token_for(key = Shipay.default_client_key)
       self.instance unless @instance
       k = Shipay::Util.to_sym(key)
       raise MissingCredentialsError.new("Missing credentials for key: '#{key}'") unless @instance.authenticators
