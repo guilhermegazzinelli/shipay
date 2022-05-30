@@ -104,7 +104,7 @@ module Shipay
     #
     def self.client_for(key = Shipay.default_client_key)
       k = Shipay::Util.to_sym(key)
-
+      self.instance unless @instance
       return nil unless @instance.authenticators.present?
 
       @instance.mutex.synchronize do
