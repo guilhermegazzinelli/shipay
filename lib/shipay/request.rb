@@ -92,12 +92,12 @@ module Shipay
         url:          full_api_url,
       }
 
-      parameters = parameters&.except_nested!(:client_key)
-      
-      if !@auth && parameters && Shipay.callback_url && Shipay::TokenManager.client_type_for(@client_key) == :e_comerce && method == 'POST'
-        aux.merge!({ payload:      MultiJson.encode(parameters.merge({callback_url: Shipay.callback_url}))})
-      elsif parameters
-        aux.merge!({ payload:      MultiJson.encode(parameters)})
+      @parameters = @parameters&.except_nested!("client_key")
+
+      if !@auth && @parameters && Shipay.callback_url && Shipay::TokenManager.client_type_for(@client_key) == :e_comerce && method == 'POST'
+        aux.merge!({ payload:      MultiJson.encode(@parameters.merge({callback_url: Shipay.callback_url}))})
+      elsif @parameters
+        aux.merge!({ payload:      MultiJson.encode(@parameters)})
       end
       extra_headers = DEFAULT_HEADERS
       extra_headers[:authorization] = "Bearer #{Shipay::TokenManager.token_for @client_key}" unless @auth
