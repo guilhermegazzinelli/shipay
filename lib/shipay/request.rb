@@ -91,7 +91,8 @@ module Shipay
         method:       method,
         url:          full_api_url,
       }
-      @parameters = @parameters&.except_nested!("client_key")
+
+      @parameters&.except_nested!("client_key")
 
       if !@auth && @parameters && Shipay.callback_url && Shipay::TokenManager.client_type_for(@client_key) == :e_comerce && method == 'POST'
         aux.merge!({ payload:      MultiJson.encode(@parameters.merge({callback_url: Shipay.callback_url}))})
