@@ -58,7 +58,7 @@ class Hash
   end
 
   def except_nested!(key)
-    self.reject!{|k, v|k == key}
+    self.reject!{|k, _| k == key || k.to_s == key }
     self.each do |_, v|
       v.except_nested!(key) if v.is_a?(Hash)
       v.map!{|obj| obj.except_nested!(key) if obj.is_a?(Hash)} if v.is_a?(Array)
