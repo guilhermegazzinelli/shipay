@@ -35,7 +35,7 @@ module Shipay
 
       def find_by_id(id, **options)
         raise RequestError.new('Invalid ID') unless id.present?
-        Shipay::Request.get(url(id), options).call class_name
+        Shipay::Request.get(url(id), options).call underscored_class_name
       end
       alias :find :find_by_id
 
@@ -54,7 +54,7 @@ module Shipay
       # alias :where :all
 
       def url(*params)
-        ["/#{ CGI.escape underscored_class_name }", *params].join '/'
+        ["/#{ CGI.escape class_name }", *params].join '/'
       end
 
       def class_name
@@ -62,7 +62,7 @@ module Shipay
       end
 
       def underscored_class_name
-        class_name.gsub(/[a-z0-9][A-Z]/){|s| "#{s[0]}_#{s[1]}"}.downcase
+        self.name.split('::').last.gsub(/[a-z0-9][A-Z]/){|s| "#{s[0]}_#{s[1]}"}.downcase
       end
     end
   end

@@ -91,7 +91,6 @@ module Shipay
         method:       method,
         url:          full_api_url,
       }
-
       @parameters = @parameters&.except_nested!("client_key")
 
       if !@auth && @parameters && Shipay.callback_url && Shipay::TokenManager.client_type_for(@client_key) == :e_comerce && method == 'POST'
@@ -104,7 +103,6 @@ module Shipay
       extra_headers["x-shipay-order-type"] = "e-order" if (!@auth && Shipay::TokenManager.client_type_for(@client_key) == :e_comerce)
 
       aux.merge!({ headers: extra_headers })
-      pp aux
       aux
     end
 

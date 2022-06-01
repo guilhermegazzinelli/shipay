@@ -131,7 +131,8 @@ module Shipay
       end
 
       def capitalize_name(name)
-        name.gsub(/(\A\w|\_\w)/){ |str| str.gsub('_', '').upcase }
+        name.split('_').collect(&:capitalize).join
+        # name.gsub(/(\A\w|\_\w)/){ |str| str.gsub('_', '').upcase }
       end
     end
   end
