@@ -16,7 +16,7 @@ module Shipay
     #     order_instance.refund(amount: 1.0)
     def refund(params={})
       raise ParamError.new("Missing ammount param", :amount, :float, url('refund')) unless params.has_key? :amount
-      update Shipay::Request.delete(url('refund'), params: params.merge(client_key: @client_key)).call(class_name)
+      update Shipay::Request.delete(url_delete('refund'), params: params.merge(client_key: @client_key)).call(underscored_class_name)
       self
     end
 
@@ -28,12 +28,17 @@ module Shipay
       order_id
     end
 
+    def url_delete(*params)
+      raise RequestError.new('Invalid ID') unless primary_key.present?
+      ["/order", CGI.escape(primary_key.to_s), *params].join('/')
+    end
+
     #
     # Request order Cancel to Shipay api
     #
     # @return [Order] Return model order instance
     def cancel()
-      update Shipay::Request.delete(url, client_key: @client_key).call(class_name)
+      update Shipay::Request.delete(url_delete, client_key: @client_key).call(underscored_class_name)
       self
     end
   end
