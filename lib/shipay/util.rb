@@ -50,3 +50,18 @@ module Shipay
     end
   end
 end
+
+class Hash
+  def except_nested(key)
+    r = Marshal.load(Marshal.dump(self))
+    r.except_nested!(key)
+  end
+
+  def except_nested!(key)
+    self.reject!{|k, v|k == key}
+    self.each do |_, v|
+      v.except_nested!(key) if v.is_a?(Hash)
+      v.map!{|obj| obj.except_nested!(key) if obj.is_a?(Hash)} if v.is_a?(Array)
+    end
+  end
+end
