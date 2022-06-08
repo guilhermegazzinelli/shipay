@@ -1,7 +1,6 @@
 require 'uri'
 require 'rest_client'
 require 'multi_json'
-require 'byebug'
 
 
 DEFAULT_HEADERS = {
