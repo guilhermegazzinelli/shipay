@@ -33,13 +33,12 @@ end
 
 def initialize_shipay
   pp "Initilizing..."
-  Shipay.secret_key = 'Q__g6ie850Pv4jVBQUeyAMA_mlJH3xG1Acg2FiPU_lYpVol9z69RHmOE4BZDMaHVGsMEg1s9BI5pvgKkCAWDdw'
-  Shipay.access_key ='CyUqG2hSfQJbE8OTWfy1fQ'
-  # Shipay.client_id='ubceuMCPeVygHW8xynrFYzbF3JKE1zlnpjNBReM6gDz0jzQ-5clVgRdtRRDJ5yWENkGMnC3VI2wQSyu_507g5c9ujS6D5eOSBVheKbMVbEW8qk8dYb41yqgl7o9xv-puarpHV7Dk3jv6n6_HZlAl4S8gHjNsayuj2RSqT8AbtY4'
+  Shipay.secret_key = ""
+  Shipay.access_key = ""
+  # Shipay.client_id = ""
 
-  Shipay.credentials = [{key: :default, client_id: "ubceuMCPeVygHW8xynrFYzbF3JKE1zlnpjNBReM6gDz0jzQ-5clVgRdtRRDJ5yWENkGMnC3VI2wQSyu_507g5c9ujS6D5eOSBVheKbMVbEW8qk8dYb41yqgl7o9xv-puarpHV7Dk3jv6n6_HZlAl4S8gHjNsayuj2RSqT8AbtY4"},
-    {key: :horizonte, type: :e_comerce, client_id: "pYRhdWxpjuHtfr65Jr7jgPeyL-p-iXHxnkJT2w6vKZFsPLYxMJkciEUeGESae_Jlsqv8YCC7eyXF-ZuT1vUrruEvEa7q0X5Lcj7NFj-9MyDti0dEKqftyrvr_ZZWDJAASb4QNbft-HnJX1BxbuNkXzWwrcxjtMA2PtomvO1u17Y"}
-  ]
+  Shipay.credentials = [ { key: :default, client_id: "" } ]
+
   @ch = {
     order_ref: "shipaypag-001",
     wallet: "shipay-pagador",
@@ -68,7 +67,6 @@ def initialize_shipay
       phone: "+55 11 99999-9999"
     }
   }
-
 end
 
 initialize_shipay
