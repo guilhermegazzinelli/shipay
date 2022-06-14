@@ -60,7 +60,6 @@ module Shipay
     end
 
     def self.get(url, options={})
-      pp options
       self.new url, 'GET', options
     end
 
@@ -98,6 +97,7 @@ module Shipay
       elsif @parameters
         aux.merge!({ payload:      MultiJson.encode(@parameters)})
       end
+      
       extra_headers = DEFAULT_HEADERS
       extra_headers[:authorization] = "Bearer #{Shipay::TokenManager.token_for @client_key}" unless @auth
       extra_headers["x-shipay-order-type"] = "e-order" if (!@auth && Shipay::TokenManager.client_type_for(@client_key) == :e_comerce)
@@ -110,5 +110,4 @@ module Shipay
       Shipay.api_endpoint + path
     end
   end
-
 end
