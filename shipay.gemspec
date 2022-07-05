@@ -6,7 +6,7 @@ Gem::Specification.new do |spec|
   spec.name = "shipay"
   spec.version = Shipay::VERSION
   spec.authors = ["Guilherme Gazzinelli"]
-  spec.email = ["guilherme.gazzinelli@ggmail.com"]
+  spec.email = ["guilherme.gazzinelli@gmail.com"]
 
   spec.summary = "Gem para integração com a Api da Shipay"
   spec.description = "Gem para integração de pagamento via pix e carteira digitais da Shipay"

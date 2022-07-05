@@ -8,3 +8,6 @@
 
 - Adds enviroment checking for production URL switching.
 
+## [0.1.3] - 2022-07-05
+
+- Correct production verifivation method
