@@ -26,9 +26,7 @@ module Shipay
 
   @default_client_key = :default
 
-  # @api_endpoint = (production?)? "https://" : "https://api-staging.shipay.com.br"
-  @api_endpoint =  "https://api-staging.shipay.com.br"
-  # @api_endpoint = 'https://postman-echo.com/get'
+  @api_endpoint = (production?)? "https://api.shipay.com.br" : "https://api-staging.shipay.com.br"
 
   def self.production?
     ENV["RACK_ENV"] == "production" ||
