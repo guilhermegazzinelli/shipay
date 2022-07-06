@@ -11,3 +11,8 @@
 ## [0.1.3] - 2022-07-05
 
 - Correct production verifivation method
+
+## [0.1.4] - 2022-07-05
+
+- Fix production definition for Rails enviroment
+

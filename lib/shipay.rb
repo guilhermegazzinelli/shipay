@@ -27,7 +27,7 @@ module Shipay
       ENV["RACK_ENV"] == "production" ||
         ENV["RAILS_ENV"] == "production" ||
         ENV["PRODUCTION"] ||
-        ENV["production"] || (Rails.env.production? if Object.const_defined?(::Rails))
+        ENV["production"] || (Rails.env.production? if Object.const_defined?('::Rails'))
 
       rescue NameError => e
         return false
