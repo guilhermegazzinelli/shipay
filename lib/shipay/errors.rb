@@ -38,11 +38,11 @@ module Shipay
 
     def initialize(response)
       @response = response
-      @errors   = response['message'].map do |message|
+      @errors   = response['message']&.map do |message|
         params = error.values_at('message', 'parameter_name', 'type', 'url')
         ParamError.new(*params)
       end
-      super @errors.map(&:message).join(', ')
+      super @errors&.map(&:message).join(', ')
     end
 
     def to_h
