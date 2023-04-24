@@ -16,3 +16,7 @@
 
 - Fix production definition for Rails enviroment
 
+
+## [0.1.5] - 2023-05-24
+
+- Issue #1 - Failed to create Pix - undefined method `map' for nil:NilClass
